@@ -1,0 +1,30 @@
+.ai-lab/
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments (various naming styles)
+.venv/
+.venv*/
+.env
+.env*
+*.env
+*.venv/
+.direnv/
+.tool-versions
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Distribution / build artifacts
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+EOF
