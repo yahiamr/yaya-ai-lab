@@ -35,6 +35,7 @@ def create_app() -> FastAPI:
         title=settings.APP_NAME,
         debug=settings.DEBUG,
         version="0.1.0",
+        root_path=settings.ROOT_PATH, 
     )
 
     # Register all routes/endpoints for the app

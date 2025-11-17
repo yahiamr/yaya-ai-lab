@@ -41,7 +41,12 @@ class Settings(BaseSettings):
         default="DEBUG",
         description="logging level across the whole system",
     )
+    # --- Deployment / proxy configuration ---
 
+    ROOT_PATH: str = Field(
+        default="",
+        description="URL root path when running behind a reverse proxy (e.g. /proxy/8000).",
+    )
     # --- Database configuration ---
 
     DATABASE_URL: AnyUrl = Field(
