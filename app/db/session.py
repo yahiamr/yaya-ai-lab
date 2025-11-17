@@ -34,7 +34,7 @@ SessionLocal = sessionmaker(
     future=True,
 )
 
-def get_db() -> Generator[Session, None, None]:
+def get_db() -> Generator[session, None, None]:
     """
     FastAPI dependency that provides a database session.
 

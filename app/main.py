@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.core.config import get_settings, Settings
 from app.core.logging import configure_logging, get_logger
-
+from app.api.v1 import api_router
 
 def create_app() -> FastAPI:
     """
@@ -80,10 +80,8 @@ def register_routes(app: FastAPI) -> None:
         logger.debug("Health check called.")
         return JSONResponse({"status": "ok"})
 
-    # Future:
-    # from app.api.v1.router import api_router
-    # app.include_router(api_router, prefix="/api/v1")
-
+    # Include versioned API routes under /api/v1
+    app.include_router(api_router, prefix="/api/v1")
 
 # Global app instance for ASGI servers
 app = create_app()
