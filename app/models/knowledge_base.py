@@ -29,4 +29,13 @@ class KnowledgeBase(Base):
         nullable=False,
     )
     # ORM relationship back to Workspace
-    workspace = relationship("Workspace", back_populates="knowledge_bases")
+    workspace = relationship(
+        "Workspace",
+        back_populates="knowledge_bases"
+        )
+
+    collections= relationship(
+        "collections",
+        back_populates="knowledge_base",
+        cascade="all, delete-orphan",
+    )
