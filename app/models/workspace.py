@@ -1,5 +1,6 @@
 from sqlalchemy import Column,String,DateTime,Text,func
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 import uuid
 
 from app.db.base import Base
@@ -19,6 +20,12 @@ class Workspace(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
+    )
+
+    knowledge_bases = relationship(
+        "KnowledgeBase",
+        back_populates="workspace",
+        cascade="all, delete-orphan",
     )
 
     
