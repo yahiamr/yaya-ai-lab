@@ -20,7 +20,7 @@ logger = get_logger("app.db")
 # - str(settings.DATABASE_URL) converts AnyUrl to plain string.
 # - echo=settings.DEBUG can be useful when debugging SQL queries.
 engine = create_engine(
-    str(settings.DATABASE_URL),
+    settings.sqlalchemy_database_url,
     echo=settings.DEBUG,
     future=True,  # use SQLAlchemy 2.x style behavior
 )

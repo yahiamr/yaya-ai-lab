@@ -47,11 +47,18 @@ class Settings(BaseSettings):
         default="",
         description="URL root path when running behind a reverse proxy (e.g. /proxy/8000).",
     )
-    # --- Database configuration ---
+    # --- Database configuration (primary source: POSTGRES_* variables) ---
 
-    DATABASE_URL: AnyUrl = Field(
-        default="postgresql://postgres:postgres@localhost:5432/seqera_ai",
-        description="SQLAlchemy-style database URL for Postgres.",
+    POSTGRES_HOST: str = Field(default="localhost")
+    POSTGRES_PORT: int = Field(default=5433)
+    POSTGRES_USER: str = Field(default="yaya")
+    POSTGRES_PASSWORD: str = Field(default="yaya_password")
+    POSTGRES_DB: str = Field(default="yaya_ai_lab")
+
+    # Optional full URL override (e.g. for managed DB in prod)
+    DATABASE_URL: str | None = Field(
+        default=None,
+        description="Optional full DB URL. If not set, it is built from POSTGRES_*.",
     )
 
     # --- OpenRouter / LLM configuration ---
@@ -88,7 +95,22 @@ class Settings(BaseSettings):
         case_sensitive=True,        # environment variable names are case-sensitive
         extra="ignore",             # ignore unknown env vars instead of raising
     )
+    @property
+    def sqlalchemy_database_url(self) -> str:
+        """
+        Return the SQLAlchemy database URL.
 
+        Priority:
+        1) If DATABASE_URL is set, use it as-is.
+        2) Otherwise, build it from POSTGRES_* fields.
+        """
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+
+        return (
+            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        )
 
 @lru_cache
 def get_settings() -> Settings:
