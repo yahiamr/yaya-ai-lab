@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from fastapi import HTTPException,APIRouter,Depends,status
 from sqlalchemy.orm import session
@@ -6,7 +7,7 @@ from sqlalchemy.orm import session
 from app.db.session import get_db
 from app.models.workspace import Workspace
 from app.schemas.workspace import WorkspaceCreate,WorkspaceRead
-
+from app.schemas.knowledge_base import KnowledgeBaseRead
 router = APIRouter()
 
 @router.post(
@@ -49,3 +50,13 @@ def list_workspaces(
 ) -> List[WorkspaceRead]:
     workspaces = db.query(Workspace).order_by(Workspace.created_at.desc()).all()
     return workspaces
+
+
+# just to test the relationships concept
+@router.get(
+    "/workspaces/{id}",
+    response_model=List[KnowledgeBaseRead]
+)
+def list_kb_per_ws(id:UUID,db: session = Depends(get_db),) -> List[KnowledgeBaseRead]:
+    ws = db.query(Workspace).filter(Workspace.id == id).first()
+    return ws.knowledge_bases

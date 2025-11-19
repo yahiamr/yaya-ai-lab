@@ -8,7 +8,7 @@ from app.db.session import get_db
 from app.models.workspace import Workspace
 from app.models.knowledge_base import KnowledgeBase
 from app.schemas.knowledge_base import KnowledgeBaseCreate,KnowledgeBaseRead
-
+from app.schemas.workspace import WorkspaceRead
 router = APIRouter()
 
 def _get_workspace_or_404(workspace_id: UUID, db: Session) -> Workspace:
@@ -61,7 +61,7 @@ def create_knowledge_base(
     db.refresh(kb)
     return kb
 
-@router.get("workspaces/{workspace_id}/knowledge-bases",response_model=List[KnowledgeBaseRead],)
+@router.get("/workspaces/{workspace_id}/knowledge-bases",response_model=List[KnowledgeBaseRead],)
 def list_knowledge_bases(workspace_id: UUID,db: Session = Depends(get_db),) -> List[KnowledgeBaseRead]:
     _get_workspace_or_404(
         workspace_id=workspace_id,
@@ -75,3 +75,14 @@ def list_knowledge_bases(workspace_id: UUID,db: Session = Depends(get_db),) -> L
     .all()
     )
     return kbs
+
+@router.get(
+    "/knowledge_base/{kb_id}",
+    response_model=str,
+)
+def get_my_workspace_name(
+    kb_id:UUID,
+    db: Session = Depends(get_db),
+)-> str:
+    kb = db.query(KnowledgeBase).filter(KnowledgeBase.id == kb_id).first()
+    return kb.workspace.name

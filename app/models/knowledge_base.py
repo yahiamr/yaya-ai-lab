@@ -35,7 +35,7 @@ class KnowledgeBase(Base):
         )
 
     collections= relationship(
-        "collections",
+        "Collection",
         back_populates="knowledge_base",
         cascade="all, delete-orphan",
     )

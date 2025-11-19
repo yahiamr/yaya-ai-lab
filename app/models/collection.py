@@ -29,4 +29,4 @@ class Collection(Base):
         nullable=False,
     )
 
-    knowledge_base = relationship("KnowlegeBase",back_populates="collections")
+    knowledge_base = relationship("KnowledgeBase",back_populates="collections")
