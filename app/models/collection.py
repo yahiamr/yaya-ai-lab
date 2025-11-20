@@ -1,22 +1,23 @@
-from sqlalchemy import Column,Text, String,DateTime, ForeignKey, func
+from sqlalchemy import Column, Text, String, DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
 
 from app.db.base import Base
 
+
 class Collection(Base):
     __tablename__ = "collections"
 
-    id= Column(
+    id = Column(
         UUID(as_uuid=True),
         primary_key=True,
         default=uuid.uuid4,
     )
 
-    knowledge_base_id= Column(
+    knowledge_base_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("knowledge_bases.id",ondelete="CASCADE"),
+        ForeignKey("knowledge_bases.id", ondelete="CASCADE"),
         nullable=False,
     )
 
@@ -29,4 +30,7 @@ class Collection(Base):
         nullable=False,
     )
 
-    knowledge_base = relationship("KnowledgeBase",back_populates="collections")
+    knowledge_base = relationship("KnowledgeBase", back_populates="collections")
+    documents = relationship(
+        "Document", back_populates="collection", cascade="all, delete-orphan"
+    )
