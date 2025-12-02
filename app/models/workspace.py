@@ -28,4 +28,8 @@ class Workspace(Base):
         cascade="all, delete-orphan",
     )
 
-    
+    datasets = relationship(
+        "Dataset",
+        back_populates="workspace",
+        cascade="all, delete-orphan",
+    )
